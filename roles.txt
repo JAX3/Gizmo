@@ -1,0 +1,14 @@
+The roles below are the public game roles that we offer.
+
+
+```Games:
+!overwatch - Gives you the overwatch role.
+!dota - Gives you the dota 2 role.
+!pubg - Gives you the pubg role.
+!league - Gives you the league of legend role role.
+!csgo - Gives you the csgo role role.
+!hearthstone - Gives you the hearthstone role.
+!cod - Gives you the Call of duty role.
+!fornite - Give you the fornite role.
+!r6 - Gives you the Rainbow Six Siege role.
+```

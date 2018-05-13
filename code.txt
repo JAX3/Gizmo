@@ -1,0 +1,30 @@
+(self, ctx, channel:Channel, *, content:str):
+        '''
+        Echos some content right back at you.
+        '''
+
+        attachments = ctx.message.attachments
+        content = content.replace('{EVERYONE}', '@everyone')
+        if attachments:
+            filename = attachments[0]['filename']
+            url = attachments[0]['url']
+            fp = None
+            async with self.session.get(url) as r:
+                fp = await r.content()
+            await self.bot.send_file(channel, fp, content=content)
+        else:
+            await self.bot.send_message(channel, content)
+        await self.bot.delete_message(ctx.message)
+
+
+
+
+
+
+
+ const sayMessage = args.join(" ");
+      const  content = content.replace('{EVERYONE}', '@everyone')
+
+    let channel = client.channels.get('228829811370360832');  
+    channel.send(sayMessage);
+         message.delete().catch(O_o=>{}); 

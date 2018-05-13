@@ -1,0 +1,9 @@
+Below is a list of commands that our bots will respond to. 
+
+```General:
+!ping - Best Command EU.
+!help - Shows this message.
+!joined - shows when you joined.
+!info - shows info about the server with useful links.
+!role - displays the avaible roles.
+```
