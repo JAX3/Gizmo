@@ -84,7 +84,7 @@ message.author.send(role)
 client.on('message', (message)=>{
   if(message.content.startsWith(config.prefix+"info")) {
 	const embed = new Discord.RichEmbed()
-		.setTitle("Anubis")
+		.setTitle("Gizmo")
 		.setAuthor("Description")
 		.setColor(0xAF0F67)
 		.setDescription("Welcome to YaLLa esports Below are a few usefull links and information.")
