@@ -13,6 +13,7 @@ client.login(config.token);
 //on ready stuff.
 client.on("ready",() => {
 	console.log("my Prefix:",config.prefix,"my id: ",config.id);
+	client.user.setUsername("Gizmo");
 	client.user.setPresence({ game: { name:" Yalla Esports || !help", type: 0 } });
 });
 
@@ -22,7 +23,6 @@ let  channel =  client.channels.get(config.channel);
 console.log(channel);
 channel.send(`Yalla ${member}!, Welcome to YaLLa eSports ! What games do you play?! Please Read our <#267986741137244161>.<:yalla:247970940472918017>`);
 
-  console.log(`${member.user.username} has joined`);
 
 }); 
 
@@ -39,11 +39,19 @@ client.on('message', (message)=>{
   }});
   
 
-  
 
 
 
 
+		client.on('message', (message)=>{
+			if(message.content.startsWith(config.prefix+"role")) {
+			
+	var role = fs.readFileSync("./role.txt","utf-8");
+	message.delete().catch(O_o=>{});    
+message.author.send(role)
+		
+		}});
+		
 
 
 
@@ -79,14 +87,15 @@ client.on('message', (message)=>{
 		.setTitle("Anubis")
 		.setAuthor("Description")
 		.setColor(0xAF0F67)
-		.setDescription("Yalla Esport was born out of a passion for gaming shared by three friends, better known as Klaus, Anas and Tom, who between them are on a mission to build a community of gamers with an organized structure in the MENA region, championing the gaming culture and building the perfect environment for professional gamers to flourish.")
+		.setDescription("Welcome to YaLLa esports Below are a few usefull links and information.")
 		.setFooter("Made by JAX for Yalla esports")
 		.setTimestamp()
 		.addField("Commands","Do !help for the list of commands.")
-		.addField("JAX", "The creator of this wonderful bot. PLz no steal.", true)
+		.addField("JAX", "The creator of this wonderful client. PLz no steal.", true)
 		.addField("Social","below are the important social media links.")
 		.addField(`Discord`,`Here's our discord invite link <:yalla:247970940472918017> .\n http://discord.yallaesports.com/`,true)
-		.addField(`Website`,`Here's our Website link link <:yalla:247970940472918017> .\n https://www.yallaesports.com/`,true)
+        .addField(`Website`,`Here's our Website  link <:yalla:247970940472918017> .\n https://www.yallaesports.com/`,true)
+        .addField(`Twitter`,`Here's our Twitter link  <:yalla:247970940472918017>. \n https://twitter.com/YaLLaEsports`,true)
 		message.channel.send({embed});
 
 }});
@@ -117,7 +126,7 @@ for (const file of commandFiles) {
 };
 
 client.on('message', message => {
-	if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+	if (!message.content.startsWith(config.prefix) || message.author.client) return;
 
 	const args = message.content.slice(config.prefix.length).split(/\s+/);
   const command = args.shift().toLowerCase();
@@ -137,35 +146,11 @@ client.on('message', message => {
 
 
 
-/// do not touch it allows for commands to work
-for (const file of commandFiles) {
-	const command = require(`./command/${file}`);
-	client.commands.set(command.name, command);
-};
-
-client.on('message', message => {
-	if (!message.content.startsWith(config.index) || message.author.bot) return;
-
-	const args = message.content.slice(config.index.length).split(/\s+/);
-  const command = args.shift().toLowerCase();
-
-	if (!client.commands.has(command)) return;
-
-	try {
-		client.commands.get(command).execute(message, args,client);
-	}
-	catch (error) {
-		console.error(error);
-		message.reply(config.error);
-	}
-
-
-});
 
 
 //test functions
 
-const sql = require("sqlite");
+/*const sql = require("sqlite");
 sql.open("./score.sqlite");
 
 
@@ -213,15 +198,58 @@ client.on('message', (message)=>{
 	  });
 	}
   
-
-
-
-
-
-
-
-
-
-
-	  
 });
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+	
+/*
+client.on('message', (message)=>{
+
+	var roleList = [ 
+		"Call of Duty",
+		"CS:GO",
+		"DOTA 2",
+		"Fortnite",
+		"Heartstone",
+		"League of Legends",
+		"Overwatch",
+		"PUBG",
+		"Rainbow Six Siege",
+		"otwitch"
+	];
+
+if (message.content.toLowerCase().startsWith(config.prefix+`role `)) { //only check for the command first
+  var getRoleName = function() { //make sure the first letter of the specified role is capitalized and others aren't; return the proper role name
+    return message.content.substr(9,1).toUpperCase() + message.content.substr(7).toLowerCase();
+  }
+  if (roleList.includes(getRoleName())) { //check that the role (capitalized properly) is somewhere in the array
+    let role = message.guild.roles.find("name", getRoleName());
+    let member = message.member;
+    message.delete(5000);
+    if (!message.member.roles.has(role.id)) {
+      member.addRole(role).catch(console.error); //add role!
+      message.reply("\"" + getRoleName() + "\" has been **added**.");
+    }
+    if (message.member.roles.has(role.id)) {
+      member.removeRole(role).catch(console.error); //remove role
+      message.reply("\"" + getRoleName() + "\" has been **removed**.");
+    }
+	} else { //if the role isn't found in the array, reply with an error
+
+		message.reply("role not found.").catch(console.error);
+		
+  }
+}});
+
+*/
