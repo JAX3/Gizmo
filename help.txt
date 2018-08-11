@@ -5,5 +5,7 @@ Below is a list of commands that our bots will respond to.
 !help - Shows this message.
 !joined - shows when you joined.
 !info - shows info about the server with useful links.
-!role - displays the avaible roles.
+!roles - displays the avaible roles.
+!role + game title - gives you the game role. Example: !role ow.
+!botinfo - little detail about the bot.
 ```

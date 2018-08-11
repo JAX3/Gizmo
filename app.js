@@ -1,13 +1,11 @@
 
 const fs = require("fs");
 const Discord = require('discord.js');
-const client = new Discord.Client();
-const commandFiles = fs.readdirSync('./command');
 const config = require ("./config.json");
 const embed = new Discord.RichEmbed()
-client.commands = new Discord.Collection();
+const client = new Discord.Client({disableEveryone: true});
 client.login(config.token);
-
+client.commands = new Discord.Collection();
 
 
 //on ready stuff.
@@ -15,16 +13,35 @@ client.on("ready",() => {
 	console.log("my Prefix:",config.prefix,"my id: ",config.id);
 	client.user.setUsername("Gizmo");
 	client.user.setPresence({ game: { name:" Yalla Esports || !help", type: 0 } });
+	
+
 });
 
 // welcome new user.
 client.on('guildMemberAdd', (member) => {	
-let  channel =  client.channels.get(config.channel);
-console.log(channel);
-channel.send(`Yalla ${member}!, Welcome to YaLLa eSports ! What games do you play?! Please Read our <#267986741137244161>.<:yalla:247970940472918017>`);
+	let  channel =  message.guild.channels.find(`name`, "spawn");
+	console.log(channel);
+	channel.send(`Yalla ${member}!, Welcome to YaLLa eSports ! What games do you play?! Please Read our <#267986741137244161>.<:yalla:247970940472918017>`);
+	
+	});
+	 
+
+client.on("message", async message => {
+	let messageArray = message.content.split(" ");
+	let args = messageArray.slice(1);
+	let cmd = messageArray[0];
+	let commandfile = client.commands.get(cmd.slice(config.prefix.length));
+	if(commandfile) commandfile.run(client,message,args);
+});
+	
 
 
-}); 
+
+
+
+
+
+
 
 
 
@@ -34,71 +51,28 @@ channel.send(`Yalla ${member}!, Welcome to YaLLa eSports ! What games do you pla
 client.on('message', (message)=>{
     if(message.content.startsWith(config.prefix+"ping")) {
     
-          message.channel.send(`Pong! ⏱: ${Math.round(client.ping)}ms.`);
+		  message.channel.send(`Pong! ⏱: ${Math.round(client.ping)}ms.`);
+	};
   
-  }});
-  
-
-
-
-
-
-		client.on('message', (message)=>{
-			if(message.content.startsWith(config.prefix+"role")) {
+		  if(message.content.startsWith(config.prefix+"roles")) {
 			
-	var role = fs.readFileSync("./role.txt","utf-8");
-	message.delete().catch(O_o=>{});    
-message.author.send(role)
-		
-		}});
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			var role = fs.readFileSync("./role.txt","utf-8");
+			message.delete().catch(O_o=>{});    
+		message.author.send(role)
+				
+				};
+	
+				if(message.content.startsWith(config.prefix+"help")) {
+					const fs = require('fs');
+			var help = fs.readFileSync("./help.txt","utf-8");
+			message.delete().catch(O_o=>{});    
+		  message.author.send(help)
+			
+			};
+			
+  });
   
-//info stuff
-client.on('message', (message)=>{
-  if(message.content.startsWith(config.prefix+"info")) {
-	const embed = new Discord.RichEmbed()
-		.setTitle("Gizmo")
-		.setAuthor("Description")
-		.setColor(0xAF0F67)
-		.setDescription("Welcome to YaLLa esports Below are a few usefull links and information.")
-		.setFooter("Made by JAX for Yalla esports")
-		.setTimestamp()
-		.addField("Commands","Do !help for the list of commands.")
-		.addField("JAX", "The creator of this wonderful client. PLz no steal.", true)
-		.addField("Social","below are the important social media links.")
-		.addField(`Discord`,`Here's our discord invite link <:yalla:247970940472918017> .\n http://discord.yallaesports.com/`,true)
-        .addField(`Website`,`Here's our Website  link <:yalla:247970940472918017> .\n https://www.yallaesports.com/`,true)
-        .addField(`Twitter`,`Here's our Twitter link  <:yalla:247970940472918017>. \n https://twitter.com/YaLLaEsports`,true)
-		message.channel.send({embed});
 
-}});
 
 //joined embed
 client.on("message", (message) => {
@@ -117,32 +91,107 @@ client.on("message", (message) => {
 
 
 
+fs.readdir("./commands/", (err, files) => {
 
-
-/// do not touch it allows for commands to work
-for (const file of commandFiles) {
-	const command = require(`./command/${file}`);
-	client.commands.set(command.name, command);
-};
-
-client.on('message', message => {
-	if (!message.content.startsWith(config.prefix) || message.author.client) return;
-
-	const args = message.content.slice(config.prefix.length).split(/\s+/);
-  const command = args.shift().toLowerCase();
-
-	if (!client.commands.has(command)) return;
-
-	try {
-		client.commands.get(command).execute(message, args,client);
+	if(err) console.log(err);
+  
+	let jsfile = files.filter(f => f.split(".").pop() === "js")
+	if(jsfile.length <= 0){
+	  console.log("Couldn't find commands.");
+	  return;
 	}
-	catch (error) {
-		console.error(error);
-		message.reply(config.error);
-	}
+  
+	jsfile.forEach((f, i) =>{
+	  let props = require(`./commands/${f}`);
+	  console.log(`${f} loaded!`);
+	  client.commands.set(props.help.name, props);
+	});
+  
+  });
 
 
-});
+
+
+client.on('message', message =>{
+if(message.content.toLocaleLowerCase().startsWith(config.prefix+'role'))
+{
+	var args = message.content.toLocaleLowerCase().split(" ");
+	console.log(args);
+	if(args[1] ==='ow')
+	{
+		addrole('Overwatch',message);
+		message.reply('Role added.');
+}
+
+else if (args[1] === 'dota')
+{
+	addrole('Dota 2',message);
+	message.reply('Role added.');
+}
+	else if (args[1] === 'csgo')
+{
+	addrole('CS:GO',message);
+	message.reply('Role added.');
+}
+
+else if (args[1] === 'hs')
+{
+	addrole('Hearthstone',message);
+	message.reply('Role added.');
+}
+else if (args[1] === 'pubg')
+{
+	addrole('PUBG',message);
+	message.reply('Role added.');
+}
+
+else if (args[1] === 'league')
+{
+	addrole('League of Legends',message);
+	message.reply('Role added.');
+}
+else if (args[1] === 'r6')
+{
+	addrole('Rainbow Six Siege',message);
+	message.reply('Role added.');
+}
+
+else if (args[1] === 'cod')
+{
+	addrole('Call of Duty',message);
+	message.reply('Role added.');
+}
+
+else if (args[1] === 'fortnite')
+{
+	addrole('Fortnite',message);
+	message.reply('Role added.');
+}
+
+}});
+
+
+
+function addrole(roleName,  message)
+{
+	var role = message.guild.roles.find('name', roleName);
+	message.member.addRole(role.id);
+	console.log("role found");
+	return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -212,44 +261,5 @@ client.on('message', (message)=>{
 
 
 
-	
-/*
-client.on('message', (message)=>{
+	  
 
-	var roleList = [ 
-		"Call of Duty",
-		"CS:GO",
-		"DOTA 2",
-		"Fortnite",
-		"Heartstone",
-		"League of Legends",
-		"Overwatch",
-		"PUBG",
-		"Rainbow Six Siege",
-		"otwitch"
-	];
-
-if (message.content.toLowerCase().startsWith(config.prefix+`role `)) { //only check for the command first
-  var getRoleName = function() { //make sure the first letter of the specified role is capitalized and others aren't; return the proper role name
-    return message.content.substr(9,1).toUpperCase() + message.content.substr(7).toLowerCase();
-  }
-  if (roleList.includes(getRoleName())) { //check that the role (capitalized properly) is somewhere in the array
-    let role = message.guild.roles.find("name", getRoleName());
-    let member = message.member;
-    message.delete(5000);
-    if (!message.member.roles.has(role.id)) {
-      member.addRole(role).catch(console.error); //add role!
-      message.reply("\"" + getRoleName() + "\" has been **added**.");
-    }
-    if (message.member.roles.has(role.id)) {
-      member.removeRole(role).catch(console.error); //remove role
-      message.reply("\"" + getRoleName() + "\" has been **removed**.");
-    }
-	} else { //if the role isn't found in the array, reply with an error
-
-		message.reply("role not found.").catch(console.error);
-		
-  }
-}});
-
-*/
