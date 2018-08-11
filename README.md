@@ -1,1 +1,4 @@
-# My Project's README
+Gizmo
+
+  MY DISCORD BOT
+  
