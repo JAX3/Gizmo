@@ -1,4 +1,4 @@
 Gizmo
 
-  MY DISCORD BOT
+Yalla Esports custom Discord bot.
   
