@@ -26,7 +26,7 @@ Below is a list of commands that our bots will respond to.
 * [Discord.js](https://nodejs.org/en/)
 
 
-## Made BY/For
+## Made By/For
 
 * [JAX](https://twitter.com/YaLLa_JAX)
 * [YaLLa Esport](https://twitter.com/YaLLaEsports)
